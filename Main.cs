@@ -7,14 +7,16 @@ using MelonLoader;
 
 class FOVCV1BK : MelonMod
 {
-    private static IEnumerator GSC(bool u)
+    static IEnumerator G()
     {
         while (RoomManager.field_Internal_Static_ApiWorld_0 == null) yield return null;
-        foreach (var c in Object.FindObjectsOfType<Camera>()) if (c.name == (u ? "StackedCamera : Cam_InternalUI" : "Camera (eye)")) c.fieldOfView = (u ? FOVUI.Value : FOV.Value);
+        foreach (var c in Object.FindObjectsOfType<Camera>())
+            if (c.name == "Camera (eye)") c.fieldOfView = FOV.Value;
+            else if (c.name == "StackedCamera : Cam_InternalUI") c.fieldOfView = FOVUI.Value;
     }
-    public override void OnApplicationStart() { MelonCoroutines.Start(GSC(false)); MelonCoroutines.Start(GSC(true)); }
-    public override void OnPreferencesSaved() { MelonCoroutines.Start(GSC(false)); MelonCoroutines.Start(GSC(true)); }
-    public override void OnPreferencesLoaded() { MelonCoroutines.Start(GSC(false)); MelonCoroutines.Start(GSC(true)); }
-    private static MelonPreferences_Category FOVC = MelonPreferences.CreateCategory("FOVC", "FOV Changer");
-    private static MelonPreferences_Entry<float> FOV = FOVC.CreateEntry<float>("FOV", 60, "Field of View"), FOVUI = FOVC.CreateEntry<float>("FOVUI", 60, "UI Field of View");
+    public override void OnApplicationStart() { MelonCoroutines.Start(G()); }
+    public override void OnPreferencesSaved() { MelonCoroutines.Start(G()); }
+    public override void OnPreferencesLoaded() { MelonCoroutines.Start(G()); }
+    static MelonPreferences_Category FOVC = MelonPreferences.CreateCategory("FOVC", "FOV Changer");
+    static MelonPreferences_Entry<float> FOV = FOVC.CreateEntry<float>("FOV", 60, "Field of View"), FOVUI = FOVC.CreateEntry<float>("FOVUI", 60, "UI Field of View");
 }
